@@ -15,6 +15,7 @@ public interface AccountService {
     Optional<Account> findById(String id);
 
     List<Account> findAll();
+    List<Account> findAccountBycustomerID(String customerID);
 
     Account findAndUpdateAccountsByID(Account account);
 

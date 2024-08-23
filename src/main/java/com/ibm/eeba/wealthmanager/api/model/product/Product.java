@@ -40,17 +40,6 @@ public class Product {
     @Field
     private int annualPrem;
 
-    @Field
-    private int risk;
-
-    public int getRisk() {
-        return risk;
-    }
-
-    public void setRisk(int risk) {
-        this.risk = risk;
-    }
-
     public String getName() {
         return name;
     }

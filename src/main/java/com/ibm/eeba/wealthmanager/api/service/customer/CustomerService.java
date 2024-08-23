@@ -19,5 +19,6 @@ public interface CustomerService {
     Customer findAndUpdateCustomerInvestmentByID(Customer customer);
     Customer findAndUpdateCustomerPersonalInfoByID(Customer customer);
     Customer findAndUpdateCustomerOfferByID(Customer customer);
+    Customer findAndUpdateCustomerGovIDByID(Customer customer);
 
 }

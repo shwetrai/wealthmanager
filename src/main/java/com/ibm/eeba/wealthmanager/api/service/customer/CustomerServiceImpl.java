@@ -2,6 +2,7 @@ package com.ibm.eeba.wealthmanager.api.service.customer;
 
 import com.ibm.eeba.wealthmanager.api.model.customer.Customer;
 import com.ibm.eeba.wealthmanager.api.model.customer.GovID;
+import com.ibm.eeba.wealthmanager.api.model.customer.Offer;
 import com.ibm.eeba.wealthmanager.api.model.customer.PersonalInfo;
 import com.ibm.eeba.wealthmanager.api.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,51 @@ public class CustomerServiceImpl implements CustomerService {
 //        updateDefinition.set("financialGoal",customer.getFinancialGoal());
         return mongoTemplate.findAndModify(query,updateDefinition,options,Customer.class);
     }
+    @Override
+    public Customer findAndUpdateCustomerGovIDByID(Customer customer){
+
+        Customer existingCustomer=findById(customer.getCustomerID()).get();
+        PersonalInfo existingPersonalInfo = existingCustomer.getPersonalInfo();
+        List<GovID> existingGovIDs = existingPersonalInfo.getGovID();
+        List<GovID> newGovIDs = customer.getPersonalInfo().getGovID();
+        if(existingGovIDs!=null) {
+            for (GovID newID : newGovIDs) {
+                boolean isExistingID = false;
+                for (GovID existingID : existingGovIDs) {
+                    if (existingID.getIdType().equalsIgnoreCase(newID.getIdType())) {
+                        isExistingID = true;
+                        System.out.println("Existing ID Type:" + existingID.getIdType());
+                    }
+                }
+                if (!isExistingID)
+                    existingGovIDs.add(newID);
+            }
+            // existingGovIDs.addAll(customer.getPersonalInfo().getGovID());
+            if(newGovIDs!=null)
+                newGovIDs.clear(); //Clear all Gov ID
+            customer.getPersonalInfo().setGovID(existingGovIDs);
+        }else{
+            existingPersonalInfo.setGovID(newGovIDs);
+
+        }
+        Query query = new Query().addCriteria(Criteria.where("_id").is(customer.getCustomerID()));
+        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(true);
+        Update updateDefinition = new Update().set("personalInfo",existingCustomer.getPersonalInfo());
+        updateDefinition.set("riskTolerance",existingCustomer.getRiskTolerance());
+        updateDefinition.set("creditRating",existingCustomer.getCreditRating());
+
+
+
+//        Update updateDefinition = new Update().set("currentStatus",opportunity.getCurrentStatus());
+//        updateDefinition.set("income",customer.getIncome());
+//        updateDefinition.set("expense",customer.getExpense());
+//        updateDefinition.set("debt",customer.getDebt());
+//        updateDefinition.set("investment",customer.getInvestment());
+//        updateDefinition.set("creditRating",customer.getCreditRating());
+//        updateDefinition.set("financialGoal",customer.getFinancialGoal());
+        return mongoTemplate.findAndModify(query,updateDefinition,options,Customer.class);
+    }
+
     @Override
     public Customer findAndUpdateCustomerOfferByID(Customer customer){
         Query query = new Query().addCriteria(Criteria.where("_id").is(customer.getCustomerID()));

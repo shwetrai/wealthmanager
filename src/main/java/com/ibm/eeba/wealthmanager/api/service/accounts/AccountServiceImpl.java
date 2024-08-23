@@ -2,6 +2,7 @@ package com.ibm.eeba.wealthmanager.api.service.accounts;
 
 import com.ibm.eeba.wealthmanager.api.model.accounts.Account;
 import com.ibm.eeba.wealthmanager.api.model.accounts.Transactions;
+import com.ibm.eeba.wealthmanager.api.model.product.Product;
 import com.ibm.eeba.wealthmanager.api.repository.AccountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,10 @@ public class AccountServiceImpl implements AccountService {
         return repository.findAll();
     }
 
+    @Override
+    public List<Account> findAccountBycustomerID(String customerID){
+        return repository.findAccountBycustomerID(customerID);
+    }
 
     @Override
     public Account findAndUpdateAccountsByID(Account account){
@@ -65,7 +71,8 @@ public class AccountServiceImpl implements AccountService {
                 updateDefinition.set("nominee",account.getNominee());
 
             List<Transactions> txn = exisitngAccount.getTransactions();
-
+            if(txn==null)
+                txn = new ArrayList<Transactions>();
             if(account.getTransactions() !=null)
                 txn.addAll(account.getTransactions());
             updateDefinition.set("transactions",txn);

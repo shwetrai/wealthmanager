@@ -45,12 +45,12 @@ public class ProductController {
     }
 
     @GetMapping(value = "/name/{name}")
-    public ProductList getProductByName(@PathVariable("name") String  name){
+    public Product getProductByName(@PathVariable("name") String  name){
 
         List<Product> products =productServiceImpl.findProductByName(name);
-        productList.setProductList(products);
+        //productList.setProductList(products);
 
-        return productList;
+        return products.get(0);
     }
 
     @PutMapping (consumes = MediaType.APPLICATION_JSON_VALUE, value = "/update")

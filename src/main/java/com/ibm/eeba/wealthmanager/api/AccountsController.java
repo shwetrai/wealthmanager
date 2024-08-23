@@ -48,6 +48,12 @@ public class AccountsController {
         return accountServiceImpl.findById(accountID).get();
     }
 
+    @GetMapping (value = "/customer/{customerID}")
+    public AccountList getAccountByCustomerID(@PathVariable("customerID") String  customerID){
+        accounts.setAccountList(accountServiceImpl.findAccountBycustomerID(customerID));
+        return accounts;  // For Demo getting single account
+    }
+
     @GetMapping (value = "/")
     public AccountList getAllAccounts(){
 

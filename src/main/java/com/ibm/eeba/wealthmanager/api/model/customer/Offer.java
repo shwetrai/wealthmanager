@@ -8,10 +8,21 @@ import java.util.List;
 @Component
 public class Offer {
 
-   private List<ServicePlan> servicePlans;
+   private String offerName;
+    private List<ServicePlan> servicePlans;
     private String notes;
 
     private String risk;
+
+    private String cag;
+
+    public String getOfferName() {
+        return offerName;
+    }
+
+    public void setOfferName(String offerName) {
+        this.offerName = offerName;
+    }
 
     public List<ServicePlan> getServicePlans() {
         return servicePlans;
@@ -35,5 +46,13 @@ public class Offer {
 
     public void setRisk(String risk) {
         this.risk = risk;
+    }
+
+    public String getCag() {
+        return cag;
+    }
+
+    public void setCag(String cag) {
+        this.cag = cag;
     }
 }
